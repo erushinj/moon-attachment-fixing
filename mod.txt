@@ -1,0 +1,16 @@
+{
+
+	"name" : "Attachment Fixing",
+	"description" : "wuh",
+	"author" : "moon",
+	"contact" : "no",
+	"version" : "1",
+	"color" : "218 0 78",
+	"hooks" : [
+		{
+			"hook_id" : "lib/tweak_data/weaponfactorytweakdata",
+			"script_path" : "hooks/weaponfactorytweakdata.lua"
+		}
+	]
+
+}
