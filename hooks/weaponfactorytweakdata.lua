@@ -127,18 +127,49 @@ Hooks:PostHook( WeaponFactoryTweakData, "init", "attachment_fixing_init", functi
 	table.remove(self.parts.wpn_fps_m4_upg_fg_mk12.perks, 1)	--	it makes no sense why this should have an auto lock
 	table.remove(self.parts.wpn_fps_m4_upg_fg_mk12.forbids, 22)	--	73
 	table.remove(self.parts.wpn_fps_m4_upg_fg_mk12.forbids, 21)
+	local function add_stats(part, stats_part)
+		if self.parts[stats_part].stats then
+			if self.parts[stats_part].stats.value then
+				self.parts[part].stats.value = self.parts[part].stats.value + self.parts[stats_part].stats.value
+			end
+			if self.parts[stats_part].stats.spread then
+				self.parts[part].stats.spread = self.parts[part].stats.spread + self.parts[stats_part].stats.spread
+			end
+			if self.parts[stats_part].stats.spread_moving then
+				self.parts[part].stats.spread_moving = self.parts[part].stats.spread_moving + self.parts[stats_part].stats.spread_moving
+			end
+			if self.parts[stats_part].stats.damage then
+				self.parts[part].stats.damage = self.parts[part].stats.damage + self.parts[stats_part].stats.damage
+			end
+			if self.parts[stats_part].stats.suppression then
+				self.parts[part].stats.suppression = self.parts[part].stats.suppression + self.parts[stats_part].stats.suppression
+			end
+			if self.parts[stats_part].stats.concealment then
+				self.parts[part].stats.concealment = self.parts[part].stats.concealment + self.parts[stats_part].stats.concealment
+			end
+			if self.parts[stats_part].stats.recoil then
+				self.parts[part].stats.recoil = self.parts[part].stats.recoil + self.parts[stats_part].stats.recoil
+			end
+			if self.parts[stats_part].stats.alert_size then
+				self.parts[part].stats.alert_size = self.parts[part].stats.alert_size + self.parts[stats_part].stats.alert_size
+			end
+		end
+	end
 	--	stats of long barrel, ks12-s long silencer, and emo foregrip all put together
 	self.parts.wpn_fps_m4_upg_fg_mk12.stats = {
-		value = self.parts.wpn_fps_upg_ass_m4_fg_moe.stats.value + self.parts.wpn_fps_ass_shak12_ns_suppressor.stats.value + self.parts.wpn_fps_m4_uupg_b_long.stats.value,
-		spread = self.parts.wpn_fps_upg_ass_m4_fg_moe.stats.spread + self.parts.wpn_fps_ass_shak12_ns_suppressor.stats.spread + self.parts.wpn_fps_m4_uupg_b_long.stats.spread,
-		spread_moving = self.parts.wpn_fps_m4_uupg_b_long.stats.spread_moving,
-		damage = self.parts.wpn_fps_upg_ass_m4_fg_moe.stats.damage + self.parts.wpn_fps_ass_shak12_ns_suppressor.stats.damage + self.parts.wpn_fps_m4_uupg_b_long.stats.damage,
-		suppression = self.parts.wpn_fps_ass_shak12_ns_suppressor.stats.suppression,
-		concealment = self.parts.wpn_fps_upg_ass_m4_fg_moe.stats.concealment + self.parts.wpn_fps_ass_shak12_ns_suppressor.stats.concealment + self.parts.wpn_fps_m4_uupg_b_long.stats.concealment,
-		recoil = self.parts.wpn_fps_upg_ass_m4_fg_moe.stats.recoil + self.parts.wpn_fps_ass_shak12_ns_suppressor.stats.recoil,
-		alert_size = self.parts.wpn_fps_ass_shak12_ns_suppressor.stats.alert_size
+		value = 0,
+		spread = 0,
+		spread_moving = 0,
+		damage = 0,
+		suppression = 0,
+		concealment = 0,
+		recoil = 0,
+		alert_size = 0
 	}
+	add_stats("wpn_fps_m4_upg_fg_mk12", "wpn_fps_upg_ass_m4_fg_moe")
+	add_stats("wpn_fps_m4_upg_fg_mk12", "wpn_fps_ass_shak12_ns_suppressor")
+	add_stats("wpn_fps_m4_upg_fg_mk12", "wpn_fps_m4_uupg_b_long")
 
 	self.parts.wpn_fps_smg_cobray_ns_silencer.stats = self.parts.wpn_fps_upg_ns_ass_smg_large.stats	--	74
 
-end)
+end )
