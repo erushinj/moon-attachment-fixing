@@ -1,9 +1,5 @@
 Hooks:PostHook( WeaponFactoryTweakData, "init", "attachment_fixing_init", function(self)
 
-	for id, data in pairs(self.parts) do
-		data.is_a_unlockable = true	--	i dont think this fucks with achievement or dlc locked parts
-	end
-
 	--	why
 	self.wpn_fps_snp_m95.override.wpn_fps_upg_m4_g_mgrip = {}	--	1 mod changed
 

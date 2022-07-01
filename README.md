@@ -5,6 +5,7 @@ A Payday 2 mod that makes improvements to attachments which Overkill won't do th
 ## Changes
 
 - You receive an unlimited quantity of all attachments you have unlocked
+- All attachments have no cost to attach
 - Attachments that have little to no reason to be used over another are given the stats of the better attachment
 - Sights and Longbore receive different changes
   - Longbore has no autofire lock, and uses combined stats of E.M.O Foregrip, Long Barrel, and KS12-S Long Silencer
