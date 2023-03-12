@@ -1,0 +1,23 @@
+{
+
+	"mwpt_menu_main" : "Weapon and Part Tweaks",
+
+	"mwpt_menu_is_enabled" : "Enable the mod",
+	"mwpt_menu_is_enabled_desc" : "Enables or disables the mod without going through the BLT mod manager.",
+
+	"mwpt_menu_weapon_tweaks" : "Enable Weapon Rebalances",
+	"mwpt_menu_weapon_tweaks_desc" : "Rebalances a handful of weapons into new damage tiers.",
+
+	"mwpt_menu_part_tweaks" : "Enable Part Tweaks",
+	"mwpt_menu_part_tweaks_desc" : "Gives some weapon parts the same stats as a superior part.",
+
+	"mwpt_menu_sight_tweaks" : "Enable Sight Tweaks",
+	"mwpt_menu_sight_tweaks_desc" : "Removes accuracy, stability, and concealment stats from all sights.",
+
+	"mwpt_menu_infinite_parts" : "Enable Infinite Parts",
+	"mwpt_menu_infinite_parts_desc" : "Gives an unlimited quantity of every part you own at least 1 of, with no cost to attach.",
+
+	"bm_wp_mwpt_tweaked_had_desc" : "This was tweaked by MWPT. This also had a description that was overwritten. Sorry about that.",
+	"bm_wp_mwpt_tweaked" : "This was tweaked by MWPT."
+
+}
