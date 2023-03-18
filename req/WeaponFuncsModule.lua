@@ -2,28 +2,43 @@ local WeaponFuncsModule = {}
 
 local FALLOFF_TEMPLATE = WeaponFalloffTemplate and WeaponFalloffTemplate.setup_weapon_falloff_templates() or {}
 
-local function apply_preset(id, data)
-	if not id or not data then
-		log("[MWPT][ERROR] Something is going wrong, some information is missing in a call to apply_preset.")
-		return
-	end
+WeaponFuncsModule._damage_class_map = {
+	amcar = "low",
+	g36 = "low",
+	s552 = "medium",
+	akm = "high",
+	akm_gold = "high",
+	aug = "medium",
+	scar = "high",
+	vhs = "medium",
+	asval = "high",
+	corgi = "medium",
+	galil = "medium",
+	l85a2 = "medium",
+	tecci = "low",
 
-	id.AMMO_MAX = data.AMMO_MAX
-	id.AMMO_PICKUP = data.AMMO_PICKUP
-	id.stats.damage = data.damage
+	g26 = "low_ap",
+	legacy = "low_ap",
+	holt = "medium_ap",
+	p226 = "medium_ap",
+	m1911 = "high_ap",
+	pl14 = "high_ap",
 
-	if data.stats_modifiers then
-		id.stats_modifiers = id.stats_modifiers or {}
-		id.stats_modifiers.damage = data.stats_modifiers
-	end
+	qbu88 = "medium",
 
-	id.can_shoot_through_enemy = data.armor_piercing
-	id.can_shoot_through_shield = data.armor_piercing
-	id.can_shoot_through_wall = data.armor_piercing
-	id.armor_piercing_chance = data.armor_piercing and 1
-end
+	m249 = "low",
+	mg42 = "low",
+	hk51b = "medium",
 
-local weapon_data = {
+	mp9 = "low",
+	new_mp5 = "low",
+	scorpion = "low",
+	tec9 = "low",
+	shepheard = "low",
+	erma = "low"
+}
+
+WeaponFuncsModule._weapon_data = {
 	assault_rifle = {
 		low = {
 			damage = 60,
@@ -64,7 +79,7 @@ local weapon_data = {
 	snp = {
 		medium = {
 			damage = 98,
-			stats_modifiers = 2,
+			stats_modifiers_damage = 2,
 			AMMO_MAX = 40,
 			AMMO_PICKUP = { 2, 3 }
 		}
@@ -81,127 +96,178 @@ local weapon_data = {
 			AMMO_PICKUP = { 10, 12 }
 		}
 	},
-	smg = {}
+	smg = {
+		low = {
+			damage = 60,
+			AMMO_MAX = 150,
+			AMMO_PICKUP = { 4.5, 8.25 }
+		}
+	}
 }
 
-function WeaponFuncsModule.amcar(weapon)
-	apply_preset(weapon.amcar, weapon_data.assault_rifle.low)
-	weapon.amcar.fire_mode_data.fire_rate = 0.07
-	-- weapon.amcar.stats.spread = 14
-	-- weapon.amcar.stats.recoil = 12
+function WeaponFuncsModule:damage_class_map()
+	return self._damage_class_map
 end
 
-function WeaponFuncsModule.g36(weapon)
-	apply_preset(weapon.g36, weapon_data.assault_rifle.low)
+function WeaponFuncsModule:weapon_data()
+	return self._weapon_data
+end
+
+function WeaponFuncsModule.apply_preset(id, data)
+	if not id or not data then
+		return
+	end
+
+	if data.AMMO_MAX then
+		id.AMMO_MAX = math.round(data.AMMO_MAX / id.CLIP_AMMO_MAX) * id.CLIP_AMMO_MAX
+	end
+
+	id.AMMO_PICKUP = data.AMMO_PICKUP or id.AMMO_PICKUP
+	id.stats.damage = data.damage or id.stats.damage
+
+	if data.stats_modifiers_damage then
+		id.stats_modifiers = id.stats_modifiers or {}
+		id.stats_modifiers.damage = data.stats_modifiers_damage
+	end
+
+	if data.armor_piercing then
+		id.can_shoot_through_enemy = true
+		id.can_shoot_through_shield = true
+		id.can_shoot_through_wall = true
+		id.armor_piercing_chance = 1
+	end
+end
+
+
+WeaponFuncsModule.Functions = {}
+
+function WeaponFuncsModule.Functions.amcar(weapon)
+	weapon.amcar.fire_mode_data.fire_rate = 0.07
+	weapon.amcar.stats.spread = 14
+	weapon.amcar.stats.recoil = 14
+end
+
+function WeaponFuncsModule.Functions.g36(weapon)
 	-- weapon.g36.stats.spread = 17
 	-- weapon.g36.stats.recoil = 10
 end
 
-function WeaponFuncsModule.s552(weapon)
-	apply_preset(weapon.s552, weapon_data.assault_rifle.medium)
+function WeaponFuncsModule.Functions.s552(weapon)
 	weapon.s552.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_MEDIUM
 	-- weapon.s552.stats.spread = 14
 	-- weapon.s552.stats.recoil = 14
 	-- weapon.s552.stats.reload = 9
 end
 
-function WeaponFuncsModule.akm(weapon)
-	apply_preset(weapon.akm, weapon_data.assault_rifle.high)
+function WeaponFuncsModule.Functions.akm(weapon)
 	-- weapon.akm.stats.spread = 17
 	-- weapon.akm.stats.recoil = 10
+end
 
-	apply_preset(weapon.akm_gold, weapon_data.assault_rifle.high)
-	weapon.akm_gold.stats.spread = weapon.akm.stats.spread
-	weapon.akm_gold.stats.recoil = weapon.akm.stats.recoil
+function WeaponFuncsModule.Functions.akm_gold(weapon)
+	-- weapon.akm_gold.stats.spread = 17
+	-- weapon.akm_gold.stats.recoil = 10
 	weapon.akm_gold.stats.concealment = weapon.akm.stats.concealment
 end
 
-function WeaponFuncsModule.aug(weapon)
-	apply_preset(weapon.aug, weapon_data.assault_rifle.medium)
+function WeaponFuncsModule.Functions.aug(weapon)
 	weapon.aug.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_MEDIUM
 	-- weapon.aug.stats.spread = 17
 	-- weapon.aug.stats.recoil = 10
 end
 
-function WeaponFuncsModule.scar(weapon)
-	apply_preset(weapon.scar, weapon_data.assault_rifle.high)
+function WeaponFuncsModule.Functions.scar(weapon)
 	weapon.scar.CLIP_AMMO_MAX = 20
 	-- weapon.scar.stats.spread = 17
 	-- weapon.scar.stats.recoil = 10
 end
 
-function WeaponFuncsModule.vhs(weapon)
-	apply_preset(weapon.vhs, weapon_data.assault_rifle.medium)
+function WeaponFuncsModule.Functions.vhs(weapon)
 	weapon.vhs.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_MEDIUM
 end
 
-function WeaponFuncsModule.asval(weapon)
-	apply_preset(weapon.asval, weapon_data.assault_rifle.high)
+function WeaponFuncsModule.Functions.asval(weapon)
 	weapon.asval.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_MEDIUM
 	weapon.asval.CLIP_AMMO_MAX = 20
 	-- weapon.asval.stats.spread = 17
 	-- weapon.asval.stats.recoil = 10
 end
 
-function WeaponFuncsModule.corgi(weapon)
-	apply_preset(weapon.corgi, weapon_data.assault_rifle.medium)
+function WeaponFuncsModule.Functions.corgi(weapon)
 	weapon.corgi.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_MEDIUM
 end
 
-function WeaponFuncsModule.galil(weapon)
-	apply_preset(weapon.galil, weapon_data.assault_rifle.medium)
+function WeaponFuncsModule.Functions.galil(weapon)
 	weapon.galil.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_MEDIUM
 end
 
-function WeaponFuncsModule.l85a2(weapon)
-	apply_preset(weapon.l85a2, weapon_data.assault_rifle.medium)
+function WeaponFuncsModule.Functions.l85a2(weapon)
 	weapon.l85a2.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_MEDIUM
 end
 
-function WeaponFuncsModule.tecci(weapon)
-	apply_preset(weapon.tecci, weapon_data.assault_rifle.low)
+function WeaponFuncsModule.Functions.tecci(weapon)
 	-- weapon.tecci.stats.spread = 17
 	-- weapon.tecci.stats.recoil = 10
 end
 
-function WeaponFuncsModule.g26(weapon)
-	apply_preset(weapon.g26, weapon_data.pistol.low_ap)
+function WeaponFuncsModule.Functions.g26(weapon)
 end
 
-function WeaponFuncsModule.legacy(weapon)
-	apply_preset(weapon.legacy, weapon_data.pistol.low_ap)
+function WeaponFuncsModule.Functions.legacy(weapon)
 end
 
-function WeaponFuncsModule.holt(weapon)
-	apply_preset(weapon.holt, weapon_data.pistol.medium_ap)
+function WeaponFuncsModule.Functions.holt(weapon)
 end
 
-function WeaponFuncsModule.p226(weapon)
-	apply_preset(weapon.p226, weapon_data.pistol.medium_ap)
+function WeaponFuncsModule.Functions.p226(weapon)
 end
 
-function WeaponFuncsModule.m1911(weapon)
-	apply_preset(weapon.m1911, weapon_data.pistol.high_ap)
+function WeaponFuncsModule.Functions.m1911(weapon)
 end
 
-function WeaponFuncsModule.pl14(weapon)
-	apply_preset(weapon.pl14, weapon_data.pistol.high_ap)
+function WeaponFuncsModule.Functions.pl14(weapon)
 end
 
-function WeaponFuncsModule.qbu88(weapon)
-	apply_preset(weapon.qbu88, weapon_data.snp.medium)
+function WeaponFuncsModule.Functions.qbu88(weapon)
 end
 
-function WeaponFuncsModule.m249(weapon)
-	apply_preset(weapon.m249, weapon_data.lmg.low)
+function WeaponFuncsModule.Functions.m249(weapon)
 end
 
-function WeaponFuncsModule.mg42(weapon)
-	apply_preset(weapon.mg42, weapon_data.lmg.low)
+function WeaponFuncsModule.Functions.mg42(weapon)
 end
 
-function WeaponFuncsModule.hk51b(weapon)
-	apply_preset(weapon.hk51b, weapon_data.lmg.medium)
+function WeaponFuncsModule.Functions.hk51b(weapon)
+end
+
+function WeaponFuncsModule.Functions.mp9(weapon)
+	weapon.mp9.stats.spread = 14
+	weapon.mp9.stats.recoil = 17
+end
+
+function WeaponFuncsModule.Functions.new_mp5(weapon)
+	weapon.new_mp5.stats.spread = 14
+	weapon.new_mp5.stats.recoil = 17
+end
+
+function WeaponFuncsModule.Functions.scorpion(weapon)
+	weapon.scorpion.stats.spread = 14
+	weapon.scorpion.stats.recoil = 17
+end
+
+function WeaponFuncsModule.Functions.tec9(weapon)
+	weapon.tec9.stats.spread = 14
+	weapon.tec9.stats.recoil = 17
+end
+
+function WeaponFuncsModule.Functions.shepheard(weapon)
+	weapon.shepheard.stats.spread = 14
+	weapon.shepheard.stats.recoil = 17
+end
+
+function WeaponFuncsModule.Functions.erma(weapon)
+	weapon.erma.stats.spread = 14
+	weapon.erma.stats.recoil = 17
 end
 
 return WeaponFuncsModule

@@ -15,6 +15,7 @@ if not MWPT then
 				s552 = true,
 				asval = true,
 				akm = true,
+				akm_gold = true,
 				aug = true,
 				scar = true,
 				vhs = true,
@@ -32,7 +33,13 @@ if not MWPT then
 				qbu88 = true,
 				m249 = true,
 				mg42 = true,
-				hk51b = true
+				hk51b = true,
+				mp9 = true,
+				new_mp5 = true,
+				scorpion = true,
+				tec9 = true,
+				shepheard = true,
+				erma = true
 			}
 		}
 	}
