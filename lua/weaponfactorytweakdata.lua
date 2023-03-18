@@ -156,17 +156,15 @@ local function sight_tweaks(weapon_factory)
 	end
 end
 
-local function hook_func(weapon_factory)
-	weapon_tweaks(weapon_factory)
-	part_tweaks(weapon_factory)
-	sight_tweaks(weapon_factory)
+Hooks:PostHook( WeaponFactoryTweakData, "init", "mwpt_init", function(self)
+	weapon_tweaks(self)
+	part_tweaks(self)
+	sight_tweaks(self)
 
-	for _, data in pairs(weapon_factory.parts) do
+	for _, data in pairs(self.parts) do
 		if data.MWPT_TWEAKED then
 			data.has_description = true
 			data.desc_id = data.desc_id or data.type == "gadget" and "bm_wp_mwpt_tweaked_had_desc" or "bm_wp_mwpt_tweaked"
 		end
 	end
-end
-
-Hooks:PostHook( WeaponFactoryTweakData, "init", "mwpt_init", hook_func )
+end )

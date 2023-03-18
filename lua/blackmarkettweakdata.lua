@@ -9,8 +9,6 @@ local function infinite_parts(blackmarket, tweak_data)
 	end
 end
 
-local function hook_func(blackmarket, tweak_data)
-	infinite_parts(blackmarket, tweak_data)
-end
-
-Hooks:PostHook( BlackMarketTweakData, "_init_weapon_mods", "mwpt__init_weapon_mods", hook_func )
+Hooks:PostHook( BlackMarketTweakData, "_init_weapon_mods", "mwpt__init_weapon_mods", function(self, tweak_data)
+	infinite_parts(self, tweak_data)
+end )
